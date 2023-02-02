@@ -10,5 +10,108 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id                  String @id @default(uuid()) @db.Uuid
+  username            String
+  email               String @unique // gmail?
+  password            String
+  country             String // do we need it?
+  bio                 String?
+  avatar_url          String?
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt // do we also need short bio?
+  routes              Route[]
+  activities          Activity[]
+  comments            Comment[]
+  kudos               Kudo[]
+  user_followees      Follow[] @relation("user_followees")
+  user_followers      Follow[] @relation("user_followers")
+}
+
+model Route {
+  id                  Int @id @default(autoincrement())
+  user_id             String @db.Uuid @unique
+  user                User @relation(fields: [user_id], references: [id])
+  route_data          String // check what API returns
+  title               String
+  sport               sportType
+  description         String
+  date                DateTime @default(now()) // and if not default?
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  location            Location?
+  activity            Activity?
+}
+
+enum sportType {
+  RUNNING
+  HIKING
+  WALKING
+  BIKING
+}
+
+model Location {
+  id                  Int @id @default(autoincrement())
+  latitude            Float
+  longitude           Float
+  route_id            Int @unique
+  route               Route @relation(fields: [route_id], references: [id], onDelete: Cascade)
+  // user                User @relation(fields: [user_id], references: [id])
+  order               Int
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt // do we need it?
+}
+
+model Activity {
+  id                  Int @id @default(autoincrement())
+  user_id             String @db.Uuid @unique
+  user                User @relation(fields: [user_id], references: [id])
+  route_id            Int @unique
+  route               Route @relation(fields: [route_id], references: [id], onDelete: Cascade)
+  sport               sportType
+  title               String
+  time                String
+  distance            Float
+  elevation           Int
+  description         String // do we need it?
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  kudos               Kudo[]
+  comments            Comment[]
+}
+
+model Comment {
+  id                  Int @id @default(autoincrement())
+  body                String
+  user_id             String @db.Uuid @unique
+  user                User @relation(fields: [user_id], references: [id])
+  activity_id         Int
+  activity            Activity @relation(fields: [activity_id], references: [id], onDelete: Cascade)
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+}
+
+model Kudo {
+  id                  Int @id @default(autoincrement())
+  activity_id         Int
+  activity            Activity @relation(fields: [activity_id], references: [id], onDelete: Cascade)
+  user_id             String @db.Uuid @unique
+  user                User @relation(fields: [user_id], references: [id])
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt // do we need it?
+}
+
+model Follow {
+  id                  Int @id @default(autoincrement())
+  // user_id             String @db.Uuid @unique
+  // user                User @relation(fields: [user_id], references: [id])
+  follower_id         String @db.Uuid @unique
+  follower            User @relation("user_followers", fields: [follower_id], references: [id])
+  followee_id         String @db.Uuid @unique
+  followee            User @relation("user_followees", fields: [followee_id], references: [id])
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt // do we need it?
+}
+
 
 
