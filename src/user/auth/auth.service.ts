@@ -39,7 +39,7 @@ export class AuthService {
       },
     });
 
-    return this.generateJWT(username, user.id);
+    return { token: this.generateJWT(username, user.id) };
   }
 
   async signin({ email, password }: SigninParams) {
@@ -61,7 +61,7 @@ export class AuthService {
       throw new HttpException('Invalid credentials', 400);
     }
 
-    return this.generateJWT(user.username, user.id);
+    return { token: this.generateJWT(user.username, user.id) };
   }
 
   private generateJWT(username: string, id: string) {
