@@ -15,6 +15,10 @@ interface SigninParams {
   password: string;
 }
 
+// interface Me {
+
+// }
+
 @Injectable()
 export class AuthService {
   constructor(private readonly prismaService: PrismaService) {}
@@ -62,6 +66,16 @@ export class AuthService {
     }
 
     return { token: this.generateJWT(user.username, user.id) };
+  }
+
+  async getMe(id: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    return user;
   }
 
   private generateJWT(username: string, id: string) {
