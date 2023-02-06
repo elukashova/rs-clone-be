@@ -15,17 +15,17 @@ export class SignUpDto {
   @IsEmail()
   email: string;
 
-  @IsString()
-  @MinLength(5)
+  // @IsString()
+  // @MinLength(5)
   @IsOptional()
   password: string;
 
-  @IsString()
-  @IsNotEmpty()
+  // @IsString()
+  // @IsNotEmpty()
   @IsOptional()
   country: string;
 
-  @IsString()
+  // @IsString()
   @IsOptional()
   avatar_url: string;
 
@@ -37,7 +37,7 @@ export class SignInDto {
   @IsEmail()
   email: string;
 
-  @IsString()
+  // @IsString()
   @IsOptional()
   password: string;
 
