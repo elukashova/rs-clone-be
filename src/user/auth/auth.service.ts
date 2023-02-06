@@ -5,7 +5,7 @@ import * as jwt from 'jsonwebtoken';
 import { User } from '@prisma/client';
 
 interface SignupParams {
-  name: string;
+  username: string;
   email: string;
   google: boolean;
   password?: string;
@@ -23,7 +23,7 @@ interface SigninParams {
 export class AuthService {
   constructor(private readonly prismaService: PrismaService) {}
   async signup({
-    name,
+    username,
     email,
     google,
     password,
@@ -45,7 +45,7 @@ export class AuthService {
       const hashedPassword: string = await bcrypt.hash(password, 10);
       user = await this.prismaService.user.create({
         data: {
-          name,
+          username,
           email,
           password: hashedPassword,
           country,
@@ -54,14 +54,14 @@ export class AuthService {
     } else {
       user = await this.prismaService.user.create({
         data: {
-          name,
+          username,
           email,
           avatar_url,
         },
       });
     }
 
-    return { token: this.generateJWT(name, user.id) };
+    return { token: this.generateJWT(username, user.id) };
   }
 
   async signin({ email, google, password }: SigninParams) {
@@ -85,7 +85,7 @@ export class AuthService {
       }
     }
 
-    return { token: this.generateJWT(user.name, user.id) };
+    return { token: this.generateJWT(user.username, user.id) };
   }
 
   async getMe(id: string) {
@@ -98,10 +98,10 @@ export class AuthService {
     return user;
   }
 
-  private generateJWT(name: string, id: string) {
+  private generateJWT(username: string, id: string) {
     return jwt.sign(
       {
-        name,
+        username,
         id,
       },
       process.env.JSON_TOKEN_KEY,
