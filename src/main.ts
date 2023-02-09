@@ -8,11 +8,7 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
-  app.enableCors({
-    origin: [`${configService.get('FRONT_URL')}`, 'http://localhost:8080', '*'],
-    allowedHeaders: '*',
-    credentials: true,
-  });
+  app.enableCors();
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -23,6 +19,13 @@ async function bootstrap() {
       },
     }),
   );
+
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Accept');
+    next();
+  });
 
   await app.listen(configService.get('PORT') || 3000);
 }
