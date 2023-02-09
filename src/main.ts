@@ -9,7 +9,8 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   app.enableCors({
-    origin: [`${configService.get('FRONT_URL')}`, 'http://localhost:8080'],
+    origin: [`${configService.get('FRONT_URL')}`, 'http://localhost:8080', '*'],
+    allowedHeaders: '*',
     credentials: true,
   });
 
