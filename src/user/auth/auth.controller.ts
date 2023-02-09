@@ -1,6 +1,19 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Put,
+  Param,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import { User, UserTokenInfo } from '../decorators/user.decorator';
-import { SignUpDto, SignInDto } from '../dtos/auth.dtos';
+import {
+  SignUpDto,
+  SignInDto,
+  UpdateUserDto,
+  UserResponseDto,
+} from '../dtos/auth.dtos';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -18,7 +31,15 @@ export class AuthController {
   }
 
   @Get('/me')
-  me(@User() user: UserTokenInfo) {
+  me(@User() user: UserTokenInfo): Promise<UserResponseDto> {
     return this.authService.getMe(user.id);
+  }
+
+  @Put(':id')
+  updateUser(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateUserDto,
+  ) {
+    return this.authService.updateUserById(id, body);
   }
 }
