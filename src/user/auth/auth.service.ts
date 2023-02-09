@@ -57,6 +57,8 @@ export class AuthService {
           username,
           email,
           avatar_url,
+          password: '',
+          country: '',
         },
       });
     }
@@ -72,7 +74,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new HttpException('Invalid credentials', 400);
+      throw new HttpException('Invalid credentials', 401);
     }
 
     if (!google) {
@@ -81,7 +83,7 @@ export class AuthService {
       const isValidPassword = await bcrypt.compare(password, hashedPassword);
 
       if (!isValidPassword) {
-        throw new HttpException('Invalid credentials', 400);
+        throw new HttpException('Invalid credentials', 401);
       }
     }
 
