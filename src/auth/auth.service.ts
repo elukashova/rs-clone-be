@@ -8,7 +8,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { User } from '@prisma/client';
-import { UserResponseDto } from '../dtos/auth.dtos';
+import { UserResponseDto } from './dtos/user-response.dto';
 
 interface SignupParams {
   username: string;

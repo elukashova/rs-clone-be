@@ -7,14 +7,12 @@ import {
   Param,
   ParseUUIDPipe,
 } from '@nestjs/common';
-import { User, UserTokenInfo } from '../decorators/user.decorator';
-import {
-  SignUpDto,
-  SignInDto,
-  UpdateUserDto,
-  UserResponseDto,
-} from '../dtos/auth.dtos';
+import { User, UserTokenInfo } from './decorators/auth.decorator';
+import { UpdateUserDto } from '../update/dto/user-update.dtos';
+import { SignUpDto } from './dtos/signup.dto';
+import { SignInDto } from './dtos/signin.dto';
 import { AuthService } from './auth.service';
+import { UserResponseDto } from './dtos/user-response.dto';
 
 @Controller('auth')
 export class AuthController {
