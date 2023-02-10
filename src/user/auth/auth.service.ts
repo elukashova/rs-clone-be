@@ -1,8 +1,14 @@
-import { Injectable, ConflictException, HttpException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  HttpException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { User } from '@prisma/client';
+import { UserResponseDto } from '../dtos/auth.dtos';
 
 interface SignupParams {
   username: string;
@@ -17,6 +23,14 @@ interface SigninParams {
   email: string;
   password?: string;
   google: boolean;
+}
+
+interface UpdateUserInfo {
+  username?: string;
+  email?: string;
+  password?: string;
+  country?: string;
+  avatar_url?: string;
 }
 
 @Injectable()
@@ -90,14 +104,13 @@ export class AuthService {
     return { token: this.generateJWT(user.username, user.id) };
   }
 
-  async getMe(id: string) {
+  async getMe(id: string): Promise<UserResponseDto> {
     const user: User = await this.prismaService.user.findUnique({
       where: {
         id: id,
       },
     });
-
-    return user;
+    return new UserResponseDto(user);
   }
 
   private generateJWT(username: string, id: string) {
@@ -111,5 +124,26 @@ export class AuthService {
         expiresIn: 36000000,
       },
     );
+  }
+
+  async updateUserById(id: string, data: UpdateUserInfo) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const updatedUser = await this.prismaService.user.update({
+      where: {
+        id,
+      },
+      data,
+    });
+
+    return new UserResponseDto(updatedUser);
   }
 }
