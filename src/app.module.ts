@@ -6,10 +6,9 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { UserInterceptor } from './user/interceptors/user.interceptor';
-import { UserInfoModule } from './user/user-info/user-info.module';
 
 @Module({
-  imports: [UserModule, PrismaModule, ConfigModule.forRoot(), UserInfoModule],
+  imports: [UserModule, PrismaModule, ConfigModule.forRoot()],
   controllers: [AppController],
   providers: [
     AppService,

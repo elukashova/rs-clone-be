@@ -53,6 +53,7 @@ export class UserResponseDto {
 
   @Exclude()
   password: string;
+
   country: string;
   bio: string;
 
@@ -77,6 +78,7 @@ export class UserResponseDto {
 export class UpdateUserDto {
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   username: string;
 
   @IsEmail()
