@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  ConflictException,
-  HttpException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, ConflictException, HttpException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
@@ -23,14 +18,6 @@ interface SigninParams {
   email: string;
   password?: string;
   google: boolean;
-}
-
-interface UpdateUserInfo {
-  username?: string;
-  email?: string;
-  password?: string;
-  country?: string;
-  avatar_url?: string;
 }
 
 @Injectable()
@@ -124,26 +111,5 @@ export class AuthService {
         expiresIn: 36000000,
       },
     );
-  }
-
-  async updateUserById(id: string, data: UpdateUserInfo) {
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!user) {
-      throw new NotFoundException();
-    }
-
-    const updatedUser = await this.prismaService.user.update({
-      where: {
-        id,
-      },
-      data,
-    });
-
-    return new UserResponseDto(updatedUser);
   }
 }
