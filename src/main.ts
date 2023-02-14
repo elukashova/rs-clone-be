@@ -4,11 +4,19 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
 
-  app.enableCors();
+  app.enableCors({
+    origin: [
+      `${configService.get('FRONT_URL')}`,
+      process.env.FRONT_URL,
+      process.env.DEPLOY_URL,
+      'http://127.0.0.1:3000',
+    ],
+    credentials: true,
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -19,13 +27,6 @@ async function bootstrap() {
       },
     }),
   );
-
-  app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Accept');
-    next();
-  });
 
   await app.listen(configService.get('PORT') || 3000);
 }
