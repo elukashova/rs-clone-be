@@ -92,13 +92,40 @@ export class AuthService {
   }
 
   async getMe(id: string): Promise<UserResponseDto> {
-    const user: User = await this.prismaService.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: {
         id: id,
+      },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        country: true,
+        avatar_url: true,
+        bio: true,
+        followees: {
+          select: {
+            followee_id: true,
+          },
+        },
+        followers: {
+          select: {
+            follower_id: true,
+          },
+        },
       },
     });
     return new UserResponseDto(user);
   }
+
+  //   async getMe(id: string): Promise<UserResponseDto> {
+  //   const user: User = await this.prismaService.user.findUnique({
+  //     where: {
+  //       id: id,
+  //     },
+  //   });
+  //   return new UserResponseDto(user);
+  // }
 
   private generateJWT(username: string, id: string) {
     return jwt.sign(
