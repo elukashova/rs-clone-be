@@ -1,4 +1,5 @@
-import { Body, Controller, Param, ParseUUIDPipe, Put } from '@nestjs/common';
+import { Body, Controller, Put } from '@nestjs/common';
+import { User, UserTokenInfo } from 'src/auth/decorators/auth.decorator';
 import { UpdateUserDto } from './dto/user-update.dtos';
 import { UpdateService } from './update.service';
 
@@ -6,11 +7,8 @@ import { UpdateService } from './update.service';
 export class UpdateController {
   constructor(private readonly authService: UpdateService) {}
 
-  @Put(':id')
-  updateUser(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: UpdateUserDto,
-  ) {
-    return this.authService.updateUserById(id, body);
+  @Put()
+  updateUser(@User() user: UserTokenInfo, @Body() body: UpdateUserDto) {
+    return this.authService.updateUserById(user.id, body);
   }
 }
