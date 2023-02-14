@@ -9,7 +9,7 @@ export class NoFriendsService {
   async getAllNotFriends(id: string) {
     const notFriends = await this.prismaService.user.findMany({
       where: {
-        user_followers: {
+        followers: {
           none: {
             follower_id: id,
           },

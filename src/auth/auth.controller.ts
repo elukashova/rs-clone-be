@@ -23,4 +23,9 @@ export class AuthController {
   me(@User() user: UserTokenInfo): Promise<UserResponseDto> {
     return this.authService.getMe(user.id);
   }
+
+  // @Get('/me')
+  // me(@User() user: UserTokenInfo): Promise<UserResponseDto> {
+  //   return this.authService.getMe(user.id);
+  // }
 }

@@ -24,8 +24,8 @@ model User {
   activities     Activity[]
   comments       Comment[]
   kudos          Kudo[]
-  user_followees Followee[]   
-  user_followers Follower[]   
+  followees      Followee[]   
+  followers      Follower[]   
 }
 
 model Route {
@@ -117,7 +117,7 @@ model Follower {
   id          Int      @id @default(autoincrement())
   user_id     String   @db.Uuid
   user        User     @relation(fields: [user_id], references: [id])
-  follower_id String?  @db.Uuid
+  follower_id String   @db.Uuid
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt // do we need it?
 }
@@ -126,7 +126,7 @@ model Followee {
   id          Int      @id @default(autoincrement())
   user_id     String   @db.Uuid
   user        User     @relation(fields: [user_id], references: [id])
-  followee_id String?  @db.Uuid
+  followee_id String   @db.Uuid
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt // do we need it?
 }

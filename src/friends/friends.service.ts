@@ -10,7 +10,7 @@ export class FriendsService {
   async getFriends(id: string): Promise<FriendsResponseDto[]> {
     const followers = await this.prismaService.user.findMany({
       where: {
-        user_followers: {
+        followers: {
           some: {
             follower_id: id,
           },
@@ -48,10 +48,10 @@ export class FriendsService {
       },
     });
 
-    await this.prismaService.follower.create({
-      data: {
-        user_id: id,
-        follower_id: data.friendId,
+    await this.prismaService.follower.deleteMany({
+      where: {
+        user_id: data.friendId,
+        follower_id: id,
       },
     });
 
