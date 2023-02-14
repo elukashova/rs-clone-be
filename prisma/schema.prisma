@@ -20,7 +20,6 @@ model User {
   avatar_url     String?
   created_at     DateTime   @default(now())
   updated_at     DateTime   @updatedAt
-  routes         Route[]
   activities     Activity[]
   comments       Comment[]
   kudos          Kudo[]
@@ -28,20 +27,72 @@ model User {
   followers      Follower[]   
 }
 
-model Route {
+model Follower {
+  id          Int      @id @default(autoincrement())
+  user_id     String   @db.Uuid
+  user        User     @relation(fields: [user_id], references: [id])
+  follower_id String   @db.Uuid
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt // do we need it?
+}
+
+model Followee {
+  id          Int      @id @default(autoincrement())
+  user_id     String   @db.Uuid
+  user        User     @relation(fields: [user_id], references: [id])
+  followee_id String   @db.Uuid
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt // do we need it?
+}
+
+model Activity {
   id          Int       @id @default(autoincrement())
-  user_id     String    @unique @db.Uuid
+  user_id     String    @db.Uuid
   user        User      @relation(fields: [user_id], references: [id])
-  route_data  String // check what API returns
+  time        String
+  date        DateTime
   title       String
-  sport       sportType
-  description String
-  date        DateTime  @default(now()) // and if not default?
+  elevation   String
+  duration    String
+  sport       String
+  description String?
+  distance    String?
+  companion_id String?   @db.Uuid
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
-  location    Location?
-  activity    Activity?
+  kudos       Kudo[]
+  comments    Comment[]
+  route       Route?
 }
+
+model Route {
+  id          Int       @id @default(autoincrement())
+  start_lat   String
+  start_lng   String
+  end_lat     String
+  end_lng     String
+  travel_mode String?
+  location    String?
+  activity_id Int       @unique
+  activity    Activity  @relation(fields: [activity_id], references: [id])
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+}
+
+// model Route {
+//   id          Int       @id @default(autoincrement())
+//   user_id     String    @unique @db.Uuid
+//   user        User      @relation(fields: [user_id], references: [id])
+//   route_data  String // check what API returns
+//   title       String
+//   sport       sportType
+//   description String
+//   date        DateTime  @default(now()) // and if not default?
+//   created_at  DateTime  @default(now())
+//   updated_at  DateTime  @updatedAt
+//   location    Location?
+//   activity    Activity?
+// }
 
 enum sportType {
   RUNNING
@@ -55,29 +106,10 @@ model Location {
   latitude   Float
   longitude  Float
   route_id   Int      @unique
-  route      Route    @relation(fields: [route_id], references: [id], onDelete: Cascade)
   // user                User @relation(fields: [user_id], references: [id])
   order      Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt // do we need it?
-}
-
-model Activity {
-  id          Int       @id @default(autoincrement())
-  user_id     String    @unique @db.Uuid
-  user        User      @relation(fields: [user_id], references: [id])
-  route_id    Int       @unique
-  route       Route     @relation(fields: [route_id], references: [id], onDelete: Cascade)
-  sport       sportType
-  title       String
-  time        String
-  distance    Float
-  elevation   Int
-  description String // do we need it?
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  kudos       Kudo[]
-  comments    Comment[]
 }
 
 model Comment {
@@ -112,21 +144,3 @@ model Kudo {
 //   created_at  DateTime @default(now())
 //   updated_at  DateTime @updatedAt
 // }
-
-model Follower {
-  id          Int      @id @default(autoincrement())
-  user_id     String   @db.Uuid
-  user        User     @relation(fields: [user_id], references: [id])
-  follower_id String   @db.Uuid
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt // do we need it?
-}
-
-model Followee {
-  id          Int      @id @default(autoincrement())
-  user_id     String   @db.Uuid
-  user        User     @relation(fields: [user_id], references: [id])
-  followee_id String   @db.Uuid
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt // do we need it?
-}
