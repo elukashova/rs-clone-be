@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { User, UserTokenInfo } from 'src/auth/decorators/auth.decorator';
 import { FriendsAddDto } from './dto/friends-add.dto';
-import { FriendsResponseDto } from './dto/friends-response.dto';
 import { FriendsService } from './friends.service';
 
 @Controller('friends')
@@ -9,7 +8,7 @@ export class FriendsController {
   constructor(private readonly friendService: FriendsService) {}
 
   @Get()
-  getFriends(@User() user: UserTokenInfo): Promise<FriendsResponseDto[]> {
+  getFriends(@User() user: UserTokenInfo) {
     return this.friendService.getFriends(user.id);
   }
 

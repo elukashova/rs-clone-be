@@ -103,18 +103,33 @@ export class AuthService {
         country: true,
         avatar_url: true,
         bio: true,
-        followees: {
+        followedBy: {
           select: {
-            followee_id: true,
+            follower: {
+              select: {
+                id: true,
+                username: true,
+                country: true,
+                avatar_url: true,
+              },
+            },
           },
         },
-        followers: {
+        following: {
           select: {
-            follower_id: true,
+            following: {
+              select: {
+                id: true,
+                username: true,
+                country: true,
+                avatar_url: true,
+              },
+            },
           },
         },
       },
     });
+
     return new UserResponseDto(user);
   }
 

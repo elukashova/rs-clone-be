@@ -9,6 +9,7 @@ import { UserInterceptor } from './auth/interceptors/user.interceptor';
 import { UpdateModule } from './update/update.module';
 import { FriendsModule } from './friends/friends.module';
 import { NoFriendsModule } from './no-friends/no-friends.module';
+import { ActivityModule } from './activity/activity.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { NoFriendsModule } from './no-friends/no-friends.module';
     UpdateModule,
     FriendsModule,
     NoFriendsModule,
+    ActivityModule,
   ],
   controllers: [AppController],
   providers: [
