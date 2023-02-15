@@ -1,39 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { FriendsAddDto } from './dto/friends-add.dto';
 import { FriendsResponseDto } from './dto/friends-response.dto';
+import { FriendsAddDto } from './dto/friends-add.dto';
+// import { FriendsResponseDto } from './dto/friends-response.dto';
 
 @Injectable()
 export class FriendsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getFriends(id: string): Promise<FriendsResponseDto[]> {
-    const followers = await this.prismaService.user.findMany({
+  async getFriends(id: string) {
+    const friends = await this.prismaService.follows.findMany({
       where: {
-        followers: {
-          some: {
-            follower_id: id,
+        followerId: id,
+      },
+      select: {
+        following: {
+          select: {
+            id: true,
+            username: true,
+            country: true,
+            avatar_url: true,
+            activities: true,
           },
         },
       },
     });
 
-    const filtered = followers.filter((follower) => follower.id !== id);
-    return filtered.map((friend) => new FriendsResponseDto(friend));
+    // const filtered = followees.filter((follower) => follower.id !== id);
+    return friends.map((friend) => new FriendsResponseDto(friend.following));
   }
 
   async addFriend(id: string, data: FriendsAddDto) {
-    await this.prismaService.followee.create({
+    await this.prismaService.follows.create({
       data: {
-        user_id: id,
-        followee_id: data.friendId,
-      },
-    });
-
-    await this.prismaService.follower.create({
-      data: {
-        user_id: data.friendId,
-        follower_id: id,
+        followerId: id,
+        followingId: data.friendId,
       },
     });
 
@@ -41,17 +42,10 @@ export class FriendsService {
   }
 
   async deleteFriend(id: string, data: FriendsAddDto) {
-    await this.prismaService.followee.deleteMany({
+    await this.prismaService.follows.deleteMany({
       where: {
-        user_id: id,
-        followee_id: data.friendId,
-      },
-    });
-
-    await this.prismaService.follower.deleteMany({
-      where: {
-        user_id: data.friendId,
-        follower_id: id,
+        followerId: id,
+        followingId: data.friendId,
       },
     });
 

@@ -26,18 +26,8 @@ export class FriendsResponseDto {
   created_at: Date;
   @Exclude()
   updated_at: Date;
-  // @Exclude()
-  user_followers: Followers[];
 
   constructor(partial: Partial<FriendsResponseDto>) {
     Object.assign(this, partial);
   }
 }
-
-type Followers = {
-  id: number;
-  user_id: string;
-  follower_id: string;
-  created_at: Date;
-  updated_at: Date;
-};
