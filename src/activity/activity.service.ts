@@ -42,9 +42,20 @@ export class ActivityService {
         companion_id: true,
         kudos: true,
         comments: true,
-        route: true,
+        route: {
+          select: {
+            id: true,
+            start_lat: true,
+            start_lng: true,
+            end_lat: true,
+            end_lng: true,
+            travel_mode: true,
+            location: true,
+          },
+        },
       },
     });
+
     return activities.map((activity) => new ActivityResponseDto(activity));
   }
 
@@ -66,7 +77,17 @@ export class ActivityService {
         companion_id: true,
         kudos: true,
         comments: true,
-        route: true,
+        route: {
+          select: {
+            id: true,
+            start_lat: true,
+            start_lng: true,
+            end_lat: true,
+            end_lng: true,
+            travel_mode: true,
+            location: true,
+          },
+        },
       },
     });
     return new ActivityResponseDto(activity);
@@ -107,17 +128,23 @@ export class ActivityService {
       },
     });
 
-    await this.prismaService.route.create({
-      data: {
-        activity_id: activity.id,
-        start_lat: startLat,
-        start_lng: startLng,
-        end_lat: endLat,
-        end_lng: endLng,
-        location: location,
-        travel_mode: travelMode,
-      },
-    });
+    const routeInputs = [startLat, startLng, endLat, endLng, travelMode];
+
+    const validation = routeInputs.filter((input) => !input);
+
+    if (validation.length === routeInputs.length) {
+      await this.prismaService.route.create({
+        data: {
+          activity_id: activity.id,
+          start_lat: startLat,
+          start_lng: startLng,
+          end_lat: endLat,
+          end_lng: endLng,
+          location: location,
+          travel_mode: travelMode,
+        },
+      });
+    }
 
     const activityNew = await this.prismaService.activity.findUnique({
       where: {
@@ -136,7 +163,17 @@ export class ActivityService {
         companion_id: true,
         kudos: true,
         comments: true,
-        route: true,
+        route: {
+          select: {
+            id: true,
+            start_lat: true,
+            start_lng: true,
+            end_lat: true,
+            end_lng: true,
+            travel_mode: true,
+            location: true,
+          },
+        },
       },
     });
     return new ActivityResponseDto(activityNew);
