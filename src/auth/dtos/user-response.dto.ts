@@ -15,18 +15,7 @@ export class UserResponseDto {
     return this.avatar_url;
   }
 
-  followees: FolloweeId[];
-  followers: FollowerId[];
-
   constructor(partial: Partial<UserResponseDto>) {
     Object.assign(this, partial);
   }
 }
-
-type FollowerId = {
-  follower_id: string;
-};
-
-type FolloweeId = {
-  followee_id: string;
-};

@@ -127,20 +127,50 @@ export class AuthService {
             },
           },
         },
+        activities: {
+          select: {
+            id: true,
+            time: true,
+            date: true,
+            title: true,
+            elevation: true,
+            duration: true,
+            sport: true,
+            description: true,
+            distance: true,
+            companion_id: true,
+            route: {
+              select: {
+                id: true,
+                start_lat: true,
+                start_lng: true,
+                end_lat: true,
+                end_lng: true,
+                travel_mode: true,
+                location: true,
+              },
+            },
+          },
+        },
       },
     });
 
-    return new UserResponseDto(user);
-  }
+    user.followedBy.map((data) => {
+      Object.assign(data, data.follower);
+      delete data.follower;
+      return data.follower;
+    });
 
-  //   async getMe(id: string): Promise<UserResponseDto> {
-  //   const user: User = await this.prismaService.user.findUnique({
-  //     where: {
-  //       id: id,
-  //     },
-  //   });
-  //   return new UserResponseDto(user);
-  // }
+    user.following.map((data) => {
+      Object.assign(data, data.following);
+      delete data.following;
+      return data;
+    });
+
+    const newUser = new UserResponseDto(user);
+
+    return newUser;
+  }
 
   private generateJWT(username: string, id: string) {
     return jwt.sign(
