@@ -10,6 +10,7 @@ import { UpdateModule } from './update/update.module';
 import { FriendsModule } from './friends/friends.module';
 import { NoFriendsModule } from './no-friends/no-friends.module';
 import { ActivityModule } from './activity/activity.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ActivityModule } from './activity/activity.module';
     FriendsModule,
     NoFriendsModule,
     ActivityModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [
