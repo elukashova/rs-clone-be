@@ -71,7 +71,7 @@ model Route {
 model Comment {
   id          Int      @id @default(autoincrement())
   body        String
-  userId      String   @unique @db.Uuid
+  userId      String   @db.Uuid
   user        User     @relation(fields: [userId], references: [id])
   activityId  Int
   activity    Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
@@ -83,7 +83,7 @@ model Kudo {
   id          Int      @id @default(autoincrement())
   activityId  Int
   activity    Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
-  userId      String   @unique @db.Uuid
+  userId      String   @db.Uuid
   user        User     @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt 
