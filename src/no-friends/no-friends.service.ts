@@ -15,6 +15,13 @@ export class NoFriendsService {
           },
         },
       },
+      select: {
+        id: true,
+        username: true,
+        country: true,
+        avatarUrl: true,
+        activities: true,
+      },
     });
     const filtered = notFriends.filter((user) => user.id !== id);
     return filtered.map((person) => new FriendsResponseDto(person));

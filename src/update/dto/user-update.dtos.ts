@@ -17,7 +17,7 @@ export class UpdateUserDto {
 
   @IsString()
   @IsOptional()
-  avatar_url: string;
+  avatarUrl: string;
 
   @IsString()
   @IsOptional()

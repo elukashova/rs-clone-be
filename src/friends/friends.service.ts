@@ -19,7 +19,7 @@ export class FriendsService {
             id: true,
             username: true,
             country: true,
-            avatar_url: true,
+            avatarUrl: true,
             activities: true,
           },
         },
@@ -51,33 +51,4 @@ export class FriendsService {
 
     return {};
   }
-
-  // // async getFriends(id: string) {
-  //   const info = await this.prismaService.user.findMany({
-  //     where: {
-  //       user_followers
-  //     },
-  //   });
-
-  //   const friendsIds: string[] = info.reduce((acc, cur) => {
-  //     acc.push(cur.followee_id);
-  //     return acc;
-  //   }, []);
-
-  //   return friendsIds;
-
-  // async getFriends(id: string) {
-  //   const info = await this.prismaService.followee.findMany({
-  //     where: {
-  //       user_id: id,
-  //     },
-  //   });
-
-  //   const friendsIds: string[] = info.reduce((acc, cur) => {
-  //     acc.push(cur.followee_id);
-  //     return acc;
-  //   }, []);
-
-  //   return friendsIds;
-  // }
 }

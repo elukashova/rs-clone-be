@@ -11,7 +11,7 @@ interface SignupParams {
   google: boolean;
   password?: string;
   country?: string;
-  avatar_url?: string;
+  avatarUrl?: string;
 }
 
 interface SigninParams {
@@ -29,7 +29,7 @@ export class AuthService {
     google,
     password,
     country,
-    avatar_url,
+    avatarUrl,
   }: SignupParams) {
     const userExists: User = await this.prismaService.user.findUnique({
       where: {
@@ -57,7 +57,7 @@ export class AuthService {
         data: {
           username,
           email,
-          avatar_url,
+          avatarUrl,
           password: '',
           country: '',
         },
@@ -101,7 +101,7 @@ export class AuthService {
         username: true,
         email: true,
         country: true,
-        avatar_url: true,
+        avatarUrl: true,
         bio: true,
         followedBy: {
           select: {
@@ -110,7 +110,7 @@ export class AuthService {
                 id: true,
                 username: true,
                 country: true,
-                avatar_url: true,
+                avatarUrl: true,
               },
             },
           },
@@ -122,7 +122,7 @@ export class AuthService {
                 id: true,
                 username: true,
                 country: true,
-                avatar_url: true,
+                avatarUrl: true,
               },
             },
           },
@@ -138,16 +138,14 @@ export class AuthService {
             sport: true,
             description: true,
             distance: true,
-            companion_id: true,
+            companionId: true,
             route: {
               select: {
                 id: true,
-                start_lat: true,
-                start_lng: true,
-                end_lat: true,
-                end_lng: true,
-                travel_mode: true,
-                location: true,
+                startPoint: true,
+                endPoint: true,
+                travelMode: true,
+                mapId: true,
               },
             },
           },
