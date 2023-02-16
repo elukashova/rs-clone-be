@@ -15,6 +15,7 @@ export interface CreateActivityParams {
   startPoint?: string;
   endPoint?: string;
   travelMode?: string;
+  mapId?: string;
 }
 
 @Injectable()
@@ -101,6 +102,7 @@ export class ActivityService {
       startPoint,
       endPoint,
       travelMode,
+      mapId,
     }: CreateActivityParams,
   ) {
     const activity = await this.prismaService.activity.create({
@@ -118,7 +120,7 @@ export class ActivityService {
       },
     });
 
-    if (startPoint && endPoint && travelMode) {
+    if (startPoint && endPoint && travelMode && mapId) {
       await this.prismaService.route.create({
         data: {
           activityId: activity.id,

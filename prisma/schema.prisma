@@ -63,7 +63,7 @@ model Route {
   travelMode  String?
   location    String?
   activityId  Int       @unique
-  mapId       String    @default(uuid()) @db.Uuid
+  mapId       String?    
   activity    Activity  @relation(fields: [activityId], references: [id])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
