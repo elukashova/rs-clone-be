@@ -1,16 +1,8 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude } from 'class-transformer';
 
 export class ActivityResponseDto {
   id: number;
-
-  @Exclude()
-  user_id: string;
-
-  @Expose({ name: 'userId' })
-  userId() {
-    return this.user_id;
-  }
-
+  userId: string;
   time: string;
   date: Date;
   title: string;
@@ -19,14 +11,7 @@ export class ActivityResponseDto {
   sport: string;
   description: string;
   distance: string;
-
-  @Exclude()
-  companion_id: string;
-
-  @Expose({ name: 'companionId' })
-  companionId() {
-    return this.companion_id;
-  }
+  companionId: string;
 
   @Exclude()
   created_at: Date;

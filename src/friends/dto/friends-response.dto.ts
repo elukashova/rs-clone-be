@@ -1,4 +1,4 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude } from 'class-transformer';
 
 export class FriendsResponseDto {
   id: string;
@@ -14,13 +14,7 @@ export class FriendsResponseDto {
   @Exclude()
   bio: string;
 
-  @Exclude()
-  avatar_url: string;
-
-  @Expose({ name: 'avatarUrl' })
-  avatarUrl() {
-    return this.avatar_url;
-  }
+  avatarUrl: string;
 
   @Exclude()
   created_at: Date;

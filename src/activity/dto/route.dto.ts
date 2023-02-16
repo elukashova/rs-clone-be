@@ -32,14 +32,20 @@ export class RouteResponseDto {
     return this.end_lng;
   }
 
-  location: string;
-
   @Exclude()
   activity_id: number;
   @Exclude()
   created_at: Date;
   @Exclude()
   updated_at: Date;
+
+  @Exclude()
+  travel_mode: string;
+
+  @Expose({ name: 'travelMode' })
+  travelMode() {
+    return this.travel_mode;
+  }
 
   constructor(partial: Partial<RouteResponseDto>) {
     Object.assign(this, partial);

@@ -12,11 +12,8 @@ export interface CreateActivityParams {
   description?: string;
   distance?: string;
   companionId?: string;
-  startLat?: string;
-  startLng?: string;
-  endLat?: string;
-  endLng?: string;
-  location?: string;
+  startPoint?: string;
+  endPoint?: string;
   travelMode?: string;
 }
 
@@ -27,7 +24,7 @@ export class ActivityService {
   async getActivities(id: string): Promise<ActivityResponseDto[]> {
     const activities = await this.prismaService.activity.findMany({
       where: {
-        user_id: id,
+        userId: id,
       },
       select: {
         id: true,
@@ -39,18 +36,16 @@ export class ActivityService {
         sport: true,
         description: true,
         distance: true,
-        companion_id: true,
+        companionId: true,
         kudos: true,
         comments: true,
         route: {
           select: {
             id: true,
-            start_lat: true,
-            start_lng: true,
-            end_lat: true,
-            end_lng: true,
-            travel_mode: true,
-            location: true,
+            startPoint: true,
+            endPoint: true,
+            travelMode: true,
+            mapId: true,
           },
         },
       },
@@ -74,18 +69,16 @@ export class ActivityService {
         sport: true,
         description: true,
         distance: true,
-        companion_id: true,
+        companionId: true,
         kudos: true,
         comments: true,
         route: {
           select: {
             id: true,
-            start_lat: true,
-            start_lng: true,
-            end_lat: true,
-            end_lng: true,
-            travel_mode: true,
-            location: true,
+            startPoint: true,
+            endPoint: true,
+            mapId: true,
+            travelMode: true,
           },
         },
       },
@@ -105,17 +98,14 @@ export class ActivityService {
       description,
       distance,
       companionId,
-      startLat,
-      startLng,
-      endLat,
-      endLng,
-      location,
+      startPoint,
+      endPoint,
       travelMode,
     }: CreateActivityParams,
   ) {
     const activity = await this.prismaService.activity.create({
       data: {
-        user_id: id,
+        userId: id,
         time,
         date,
         title,
@@ -124,24 +114,17 @@ export class ActivityService {
         sport,
         description,
         distance,
-        companion_id: companionId,
+        companionId: companionId,
       },
     });
 
-    const routeInputs = [startLat, startLng, endLat, endLng, travelMode];
-
-    const validation = routeInputs.filter((input) => !input);
-
-    if (validation.length === routeInputs.length) {
+    if (startPoint && endPoint && travelMode) {
       await this.prismaService.route.create({
         data: {
-          activity_id: activity.id,
-          start_lat: startLat,
-          start_lng: startLng,
-          end_lat: endLat,
-          end_lng: endLng,
-          location: location,
-          travel_mode: travelMode,
+          activityId: activity.id,
+          startPoint: startPoint,
+          endPoint: endPoint,
+          travelMode: travelMode,
         },
       });
     }
@@ -160,18 +143,16 @@ export class ActivityService {
         sport: true,
         description: true,
         distance: true,
-        companion_id: true,
+        companionId: true,
         kudos: true,
         comments: true,
         route: {
           select: {
             id: true,
-            start_lat: true,
-            start_lng: true,
-            end_lat: true,
-            end_lng: true,
-            travel_mode: true,
-            location: true,
+            startPoint: true,
+            endPoint: true,
+            travelMode: true,
+            mapId: true,
           },
         },
       },

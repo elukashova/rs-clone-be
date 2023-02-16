@@ -7,7 +7,7 @@ interface UpdateUserInfo {
   email?: string;
   password?: string;
   country?: string;
-  avatar_url?: string;
+  avatarUrl?: string;
 }
 
 @Injectable()

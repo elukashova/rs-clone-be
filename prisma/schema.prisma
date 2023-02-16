@@ -17,9 +17,9 @@ model User {
   password       String?
   country        String?    
   bio            String?
-  avatar_url     String?
-  created_at     DateTime   @default(now())
-  updated_at     DateTime   @updatedAt
+  avatarUrl      String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
   activities     Activity[]
   comments       Comment[]
   kudos          Kudo[]
@@ -36,45 +36,10 @@ model Follows {
   @@id([followerId, followingId])
 }
 
-// model User {
-//   id             String     @id @default(uuid()) @db.Uuid
-//   username       String
-//   email          String     @unique 
-//   password       String?
-//   country        String?    
-//   bio            String?
-//   avatar_url     String?
-//   created_at     DateTime   @default(now())
-//   updated_at     DateTime   @updatedAt
-//   activities     Activity[]
-//   comments       Comment[]
-//   kudos          Kudo[]
-//   followees      Followee[]   
-//   followers      Follower[]   
-// }
-
-// model Follower {
-//   id          Int      @id @default(autoincrement())
-//   user_id     String   @db.Uuid
-//   user        User     @relation(fields: [user_id], references: [id])
-//   follower_id String   @db.Uuid
-//   created_at  DateTime @default(now())
-//   updated_at  DateTime @updatedAt // do we need it?
-// }
-
-// model Followee {
-//   id          Int      @id @default(autoincrement())
-//   user_id     String   @db.Uuid
-//   user        User     @relation(fields: [user_id], references: [id])
-//   followee_id String   @db.Uuid
-//   created_at  DateTime @default(now())
-//   updated_at  DateTime @updatedAt // do we need it?
-// }
-
 model Activity {
   id          Int       @id @default(autoincrement())
-  user_id     String    @db.Uuid
-  user        User      @relation(fields: [user_id], references: [id])
+  userId      String    @db.Uuid
+  user        User      @relation(fields: [userId], references: [id])
   time        String
   date        DateTime
   title       String
@@ -83,9 +48,9 @@ model Activity {
   sport       String
   description String?
   distance    String?
-  companion_id String?   @db.Uuid
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
+  companionId String?   @db.Uuid
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   kudos       Kudo[]
   comments    Comment[]
   route       Route?
@@ -93,80 +58,33 @@ model Activity {
 
 model Route {
   id          Int       @id @default(autoincrement())
-  start_lat   String
-  start_lng   String
-  end_lat     String
-  end_lng     String
-  travel_mode String?
+  startPoint  String
+  endPoint    String
+  travelMode  String?
   location    String?
-  activity_id Int       @unique
-  activity    Activity  @relation(fields: [activity_id], references: [id])
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
+  activityId  Int       @unique
+  mapId       String    @default(uuid()) @db.Uuid
+  activity    Activity  @relation(fields: [activityId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
-
-// model Route {
-//   id          Int       @id @default(autoincrement())
-//   user_id     String    @unique @db.Uuid
-//   user        User      @relation(fields: [user_id], references: [id])
-//   route_data  String // check what API returns
-//   title       String
-//   sport       sportType
-//   description String
-//   date        DateTime  @default(now()) // and if not default?
-//   created_at  DateTime  @default(now())
-//   updated_at  DateTime  @updatedAt
-//   location    Location?
-//   activity    Activity?
-// }
-
-enum sportType {
-  RUNNING
-  HIKING
-  WALKING
-  BIKING
-}
-
-model Location {
-  id         Int      @id @default(autoincrement())
-  latitude   Float
-  longitude  Float
-  route_id   Int      @unique
-  // user                User @relation(fields: [user_id], references: [id])
-  order      Int
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt // do we need it?
-}
-
 model Comment {
   id          Int      @id @default(autoincrement())
   body        String
-  user_id     String   @unique @db.Uuid
-  user        User     @relation(fields: [user_id], references: [id])
-  activity_id Int
-  activity    Activity @relation(fields: [activity_id], references: [id], onDelete: Cascade)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  userId      String   @unique @db.Uuid
+  user        User     @relation(fields: [userId], references: [id])
+  activityId  Int
+  activity    Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Kudo {
   id          Int      @id @default(autoincrement())
-  activity_id Int
-  activity    Activity @relation(fields: [activity_id], references: [id], onDelete: Cascade)
-  user_id     String   @unique @db.Uuid
-  user        User     @relation(fields: [user_id], references: [id])
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt // do we need it?
+  activityId  Int
+  activity    Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  userId      String   @unique @db.Uuid
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt 
 }
-
-// model Follow {
-//   id          Int      @id @default(autoincrement())
-//   user_id     String   @db.Uuid
-//   user        User     @relation(fields: [user_id], references: [id])
-//   follower_id String?  @unique @db.Uuid
-//   follower    User?    @relation("user_followers", fields: [follower_id], references: [id])
-//   followee_id String?  @unique @db.Uuid
-//   followee    User?    @relation("user_followees", fields: [followee_id], references: [id])
-//   created_at  DateTime @default(now())
-//   updated_at  DateTime @updatedAt
-// }
