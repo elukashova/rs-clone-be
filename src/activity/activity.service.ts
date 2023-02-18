@@ -19,7 +19,6 @@ export interface CreateActivityParams {
 }
 
 interface UpdateActivityInfo {
-  body?: string;
   kudos?: boolean;
 }
 
@@ -247,11 +246,7 @@ export class ActivityService {
     return new ActivityResponseDto(activityNew);
   }
 
-  async updateActivityById(
-    id,
-    activityId,
-    { body, kudos }: UpdateActivityInfo,
-  ) {
+  async updateActivityById(id, activityId, { kudos }: UpdateActivityInfo) {
     const activity = await this.prismaService.activity.findUnique({
       where: {
         id: activityId,
@@ -276,16 +271,6 @@ export class ActivityService {
         where: {
           userId: id,
           activityId: activityId,
-        },
-      });
-    }
-
-    if (body) {
-      await this.prismaService.comment.create({
-        data: {
-          userId: id,
-          activityId: activityId,
-          body: body,
         },
       });
     }
