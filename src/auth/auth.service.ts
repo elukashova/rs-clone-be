@@ -139,6 +139,24 @@ export class AuthService {
             description: true,
             distance: true,
             companionId: true,
+            kudos: {
+              select: {
+                userId: true,
+              },
+            },
+            comments: {
+              select: {
+                body: true,
+                createdAt: true,
+                updatedAt: true,
+                user: {
+                  select: {
+                    avatarUrl: true,
+                    username: true,
+                  },
+                },
+              },
+            },
             route: {
               select: {
                 id: true,
@@ -163,6 +181,11 @@ export class AuthService {
       Object.assign(data, data.following);
       delete data.following;
       return data;
+    });
+
+    user.activities.forEach((activity) => {
+      const newA = activity.kudos.map((kudo) => kudo.userId);
+      Object.assign(activity.kudos, newA);
     });
 
     const newUser = new UserResponseDto(user);

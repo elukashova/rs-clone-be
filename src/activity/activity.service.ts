@@ -185,6 +185,7 @@ export class ActivityService {
           startPoint: startPoint,
           endPoint: endPoint,
           travelMode: travelMode,
+          mapId: mapId,
         },
       });
     }
@@ -289,60 +290,60 @@ export class ActivityService {
       });
     }
 
-    // const activityNew = await this.prismaService.activity.findUnique({
-    //   where: {
-    //     id: activity.id,
-    //   },
-    //   select: {
-    //     id: true,
-    //     time: true,
-    //     date: true,
-    //     title: true,
-    //     elevation: true,
-    //     duration: true,
-    //     sport: true,
-    //     description: true,
-    //     distance: true,
-    //     companionId: true,
-    //     kudos: {
-    //       select: {
-    //         userId: true,
-    //       },
-    //     },
-    //     comments: {
-    //       select: {
-    //         body: true,
-    //         createdAt: true,
-    //         updatedAt: true,
-    //         user: {
-    //           select: {
-    //             avatarUrl: true,
-    //             username: true,
-    //           },
-    //         },
-    //       },
-    //     },
-    //     route: {
-    //       select: {
-    //         id: true,
-    //         startPoint: true,
-    //         endPoint: true,
-    //         travelMode: true,
-    //         mapId: true,
-    //       },
-    //     },
-    //   },
-    // });
+    const activityNew = await this.prismaService.activity.findUnique({
+      where: {
+        id: activity.id,
+      },
+      select: {
+        id: true,
+        time: true,
+        date: true,
+        title: true,
+        elevation: true,
+        duration: true,
+        sport: true,
+        description: true,
+        distance: true,
+        companionId: true,
+        kudos: {
+          select: {
+            userId: true,
+          },
+        },
+        comments: {
+          select: {
+            body: true,
+            createdAt: true,
+            updatedAt: true,
+            user: {
+              select: {
+                avatarUrl: true,
+                username: true,
+              },
+            },
+          },
+        },
+        route: {
+          select: {
+            id: true,
+            startPoint: true,
+            endPoint: true,
+            travelMode: true,
+            mapId: true,
+          },
+        },
+      },
+    });
 
-    // activityNew.comments.map((data) => {
-    //   Object.assign(data, data.user);
-    //   delete data.user;
-    //   return data.user;
-    // });
+    activityNew.comments.map((data) => {
+      Object.assign(data, data.user);
+      delete data.user;
+      return data.user;
+    });
 
-    // const newA = activityNew.kudos.map((kudo) => kudo.userId);
-    // Object.assign(activityNew.kudos, newA);
-    // return new ActivityResponseDto(activityNew);
-    return {};
+    const newA = activityNew.kudos.map((kudo) => kudo.userId);
+    Object.assign(activityNew.kudos, newA);
+    return new ActivityResponseDto(activityNew);
+    // return {};
   }
 }
