@@ -11,7 +11,7 @@ export interface CreateCommentParams {
 export interface UpdateCommentParams {
   body?: string;
   userId?: string;
-  like?: string;
+  like?: boolean;
 }
 
 @Injectable()
@@ -45,6 +45,9 @@ export class CommentService {
       },
     });
 
+    Object.assign(commentReponse, commentReponse.user);
+    delete commentReponse.user;
+
     return new CommentResponseDto(commentReponse);
   }
 
@@ -69,14 +72,14 @@ export class CommentService {
 
       return new UpdatedCommentResponseDto(updatedComment);
     } else {
-      if (data.userId && data.like) {
+      if (data.userId && data.like === true) {
         await this.prismaService.like.create({
           data: {
             userId: data.userId,
             commentId: comment.id,
           },
         });
-      } else if (data.userId && !data.like) {
+      } else if (data.userId && data.like === false) {
         await this.prismaService.like.deleteMany({
           where: {
             commentId: comment.id,

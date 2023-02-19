@@ -146,9 +146,15 @@ export class AuthService {
             },
             comments: {
               select: {
+                id: true,
                 body: true,
                 createdAt: true,
-                updatedAt: true,
+                userId: true,
+                likes: {
+                  select: {
+                    userId: true,
+                  },
+                },
                 user: {
                   select: {
                     avatarUrl: true,
@@ -186,6 +192,16 @@ export class AuthService {
     user.activities.forEach((activity) => {
       const newA = activity.kudos.map((kudo) => kudo.userId);
       Object.assign(activity.kudos, newA);
+    });
+
+    user.activities.forEach((activity) => {
+      activity.comments.map((comment) => {
+        Object.assign(comment, comment.user);
+        delete comment.user;
+
+        const newA = comment.likes.map((like) => like.userId);
+        Object.assign(comment.likes, newA);
+      });
     });
 
     const newUser = new UserResponseDto(user);
