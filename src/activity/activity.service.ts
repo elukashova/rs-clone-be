@@ -19,7 +19,6 @@ export interface CreateActivityParams {
 }
 
 interface UpdateActivityInfo {
-  body?: string;
   kudos?: boolean;
 }
 
@@ -185,6 +184,7 @@ export class ActivityService {
           startPoint: startPoint,
           endPoint: endPoint,
           travelMode: travelMode,
+          mapId: mapId,
         },
       });
     }
@@ -246,11 +246,7 @@ export class ActivityService {
     return new ActivityResponseDto(activityNew);
   }
 
-  async updateActivityById(
-    id,
-    activityId,
-    { body, kudos }: UpdateActivityInfo,
-  ) {
+  async updateActivityById(id, activityId, { kudos }: UpdateActivityInfo) {
     const activity = await this.prismaService.activity.findUnique({
       where: {
         id: activityId,
@@ -279,70 +275,60 @@ export class ActivityService {
       });
     }
 
-    if (body) {
-      await this.prismaService.comment.create({
-        data: {
-          userId: id,
-          activityId: activityId,
-          body: body,
+    const activityNew = await this.prismaService.activity.findUnique({
+      where: {
+        id: activity.id,
+      },
+      select: {
+        id: true,
+        time: true,
+        date: true,
+        title: true,
+        elevation: true,
+        duration: true,
+        sport: true,
+        description: true,
+        distance: true,
+        companionId: true,
+        kudos: {
+          select: {
+            userId: true,
+          },
         },
-      });
-    }
+        comments: {
+          select: {
+            body: true,
+            createdAt: true,
+            updatedAt: true,
+            user: {
+              select: {
+                avatarUrl: true,
+                username: true,
+              },
+            },
+          },
+        },
+        route: {
+          select: {
+            id: true,
+            startPoint: true,
+            endPoint: true,
+            travelMode: true,
+            mapId: true,
+          },
+        },
+      },
+    });
 
-    // const activityNew = await this.prismaService.activity.findUnique({
-    //   where: {
-    //     id: activity.id,
-    //   },
-    //   select: {
-    //     id: true,
-    //     time: true,
-    //     date: true,
-    //     title: true,
-    //     elevation: true,
-    //     duration: true,
-    //     sport: true,
-    //     description: true,
-    //     distance: true,
-    //     companionId: true,
-    //     kudos: {
-    //       select: {
-    //         userId: true,
-    //       },
-    //     },
-    //     comments: {
-    //       select: {
-    //         body: true,
-    //         createdAt: true,
-    //         updatedAt: true,
-    //         user: {
-    //           select: {
-    //             avatarUrl: true,
-    //             username: true,
-    //           },
-    //         },
-    //       },
-    //     },
-    //     route: {
-    //       select: {
-    //         id: true,
-    //         startPoint: true,
-    //         endPoint: true,
-    //         travelMode: true,
-    //         mapId: true,
-    //       },
-    //     },
-    //   },
-    // });
+    activityNew.comments.map((data) => {
+      Object.assign(data, data.user);
+      delete data.user;
+      return data.user;
+    });
 
-    // activityNew.comments.map((data) => {
-    //   Object.assign(data, data.user);
-    //   delete data.user;
-    //   return data.user;
-    // });
-
-    // const newA = activityNew.kudos.map((kudo) => kudo.userId);
-    // Object.assign(activityNew.kudos, newA);
-    // return new ActivityResponseDto(activityNew);
-    return {};
+    const newA = activityNew.kudos.map((kudo) => kudo.userId);
+    Object.assign(activityNew.kudos, newA);
+    return new ActivityResponseDto(activityNew);
+    // return {};
   }
 }
