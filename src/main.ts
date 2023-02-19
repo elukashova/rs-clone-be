@@ -14,7 +14,7 @@ async function bootstrap() {
       process.env.FRONT_URL,
       process.env.DEPLOY_URL,
       'http://127.0.0.1:3000',
-      'https://deploy-preview-45--the-big-bug-theory',
+      'https://deploy-preview-45--the-big-bug-theory.netlify.app',
     ],
     credentials: true,
   });
