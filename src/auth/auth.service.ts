@@ -103,6 +103,8 @@ export class AuthService {
         country: true,
         avatarUrl: true,
         bio: true,
+        sportTypes: true,
+        challenges: true,
         followedBy: {
           select: {
             follower: {
@@ -123,6 +125,59 @@ export class AuthService {
                 username: true,
                 country: true,
                 avatarUrl: true,
+                activities: {
+                  select: {
+                    id: true,
+                    time: true,
+                    date: true,
+                    title: true,
+                    elevation: true,
+                    duration: true,
+                    sport: true,
+                    description: true,
+                    distance: true,
+                    companionId: true,
+                    kudos: {
+                      select: {
+                        userId: true,
+                        user: {
+                          select: {
+                            avatarUrl: true,
+                          },
+                        },
+                        createdAt: true,
+                      },
+                    },
+                    comments: {
+                      select: {
+                        id: true,
+                        body: true,
+                        createdAt: true,
+                        updatedAt: true,
+                        user: {
+                          select: {
+                            avatarUrl: true,
+                            username: true,
+                          },
+                        },
+                        likes: {
+                          select: {
+                            userId: true,
+                          },
+                        },
+                      },
+                    },
+                    route: {
+                      select: {
+                        id: true,
+                        startPoint: true,
+                        endPoint: true,
+                        travelMode: true,
+                        mapId: true,
+                      },
+                    },
+                  },
+                },
               },
             },
           },
@@ -142,6 +197,12 @@ export class AuthService {
             kudos: {
               select: {
                 userId: true,
+                user: {
+                  select: {
+                    avatarUrl: true,
+                  },
+                },
+                createdAt: true,
               },
             },
             comments: {
@@ -184,17 +245,33 @@ export class AuthService {
     });
 
     user.following.map((data) => {
+      data.following.activities.forEach((activity) => {
+        activity.kudos.map((kudo) => {
+          Object.assign(kudo, kudo.user);
+          delete kudo.user;
+        });
+        // Object.assign(activity.kudos, newA);
+
+        activity.comments.map((comment) => {
+          Object.assign(comment, comment.user);
+          delete comment.user;
+
+          const newA = comment.likes.map((like) => like.userId);
+          Object.assign(comment.likes, newA);
+        });
+      });
+
       Object.assign(data, data.following);
       delete data.following;
       return data;
     });
 
     user.activities.forEach((activity) => {
-      const newA = activity.kudos.map((kudo) => kudo.userId);
-      Object.assign(activity.kudos, newA);
-    });
+      activity.kudos.map((kudo) => {
+        Object.assign(kudo, kudo.user);
+        delete kudo.user;
+      });
 
-    user.activities.forEach((activity) => {
       activity.comments.map((comment) => {
         Object.assign(comment, comment.user);
         delete comment.user;
