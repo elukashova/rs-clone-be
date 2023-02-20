@@ -32,6 +32,7 @@ export class ActivityService {
         userId: id,
       },
       select: {
+        userId: true,
         id: true,
         time: true,
         date: true,
@@ -330,5 +331,15 @@ export class ActivityService {
     Object.assign(activityNew.kudos, newA);
     return new ActivityResponseDto(activityNew);
     // return {};
+  }
+
+  async deleteActivity(id: number) {
+    await this.prismaService.activity.deleteMany({
+      where: {
+        id: id,
+      },
+    });
+
+    return {};
   }
 }

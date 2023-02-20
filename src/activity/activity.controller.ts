@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -41,5 +42,10 @@ export class ActivityController {
     @Body() body: UpdateActivityDto,
   ) {
     return this.activityService.updateActivityById(user.id, activityId, body);
+  }
+
+  @Delete(':id')
+  deleteActivity(@Param('id', ParseIntPipe) activityId: number) {
+    return this.activityService.deleteActivity(activityId);
   }
 }

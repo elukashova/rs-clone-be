@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, IsEmail, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsEmail,
+  IsOptional,
+  IsArray,
+} from 'class-validator';
 
 export class UpdateUserDto {
   @IsString()
@@ -22,4 +28,12 @@ export class UpdateUserDto {
   @IsString()
   @IsOptional()
   bio: string;
+
+  @IsOptional()
+  @IsArray()
+  challenges: string[];
+
+  @IsOptional()
+  @IsArray()
+  sportTypes: string[];
 }

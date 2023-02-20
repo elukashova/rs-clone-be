@@ -8,6 +8,8 @@ interface UpdateUserInfo {
   password?: string;
   country?: string;
   avatarUrl?: string;
+  challenges?: string[];
+  sportTypes?: string[];
 }
 
 @Injectable()

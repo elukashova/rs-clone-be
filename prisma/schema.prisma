@@ -20,6 +20,8 @@ model User {
   avatarUrl      String?
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
+  challenges     String[]
+  sportTypes     String[]
   activities     Activity[]
   kudos          Kudo[]
   comments       Comment[]
