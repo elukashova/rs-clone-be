@@ -160,6 +160,7 @@ export class AuthService {
                             username: true,
                           },
                         },
+                        userId: true,
                         likes: {
                           select: {
                             userId: true,
