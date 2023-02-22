@@ -125,6 +125,7 @@ export class AuthService {
                 username: true,
                 country: true,
                 avatarUrl: true,
+                challenges: true,
                 activities: {
                   select: {
                     id: true,
