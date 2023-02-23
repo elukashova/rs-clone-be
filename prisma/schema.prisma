@@ -17,6 +17,8 @@ model User {
   password       String?
   country        String?    
   bio            String?
+  birth          String?
+  gender         String?
   avatarUrl      String?
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
