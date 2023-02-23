@@ -36,4 +36,8 @@ export class UpdateUserDto {
   @IsOptional()
   @IsArray()
   sportTypes: string[];
+
+  @IsOptional()
+  @IsString()
+  birth: string;
 }

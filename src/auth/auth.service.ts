@@ -105,6 +105,8 @@ export class AuthService {
         bio: true,
         sportTypes: true,
         challenges: true,
+        birth: true,
+        gender: true,
         followedBy: {
           select: {
             follower: {
