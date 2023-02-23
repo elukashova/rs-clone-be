@@ -140,6 +140,13 @@ export class AuthService {
                     description: true,
                     distance: true,
                     companionId: true,
+                    userId: true,
+                    user: {
+                      select: {
+                        username: true,
+                        avatarUrl: true,
+                      },
+                    },
                     kudos: {
                       select: {
                         userId: true,
@@ -198,6 +205,12 @@ export class AuthService {
             description: true,
             distance: true,
             companionId: true,
+            userId: true,
+            user: {
+              select: {
+                username: true,
+              },
+            },
             kudos: {
               select: {
                 userId: true,
@@ -254,7 +267,9 @@ export class AuthService {
           Object.assign(kudo, kudo.user);
           delete kudo.user;
         });
-        // Object.assign(activity.kudos, newA);
+
+        Object.assign(activity, activity.user);
+        delete activity.user;
 
         activity.comments.map((comment) => {
           Object.assign(comment, comment.user);
@@ -275,6 +290,9 @@ export class AuthService {
         Object.assign(kudo, kudo.user);
         delete kudo.user;
       });
+
+      Object.assign(activity, activity.user);
+      delete activity.user;
 
       activity.comments.map((comment) => {
         Object.assign(comment, comment.user);

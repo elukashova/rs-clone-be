@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { UserResponseDto } from 'src/auth/dtos/user-response.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 interface UpdateUserInfo {
   username?: string;
@@ -15,7 +15,7 @@ interface UpdateUserInfo {
 }
 
 @Injectable()
-export class UpdateService {
+export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async updateUserById(id: string, data: UpdateUserInfo) {
@@ -37,5 +37,15 @@ export class UpdateService {
     });
 
     return new UserResponseDto(updatedUser);
+  }
+
+  async deleteUser(id: string) {
+    await this.prismaService.user.deleteMany({
+      where: {
+        id,
+      },
+    });
+
+    return {};
   }
 }

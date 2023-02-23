@@ -40,4 +40,8 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   birth: string;
+
+  @IsOptional()
+  @IsString()
+  gender: string;
 }
