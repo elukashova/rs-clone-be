@@ -12,7 +12,8 @@ async function bootstrap() {
     origin: [
       `${configService.get('FRONT_URL')}`,
       process.env.FRONT_URL,
-      process.env.DEPLOY_URL,
+      process.env.DEPLOY_NETLIFY_URL,
+      process.env.DEPLOY_RENDER_URL,
       'http://127.0.0.1:3000',
       'https://deploy-preview-45--the-big-bug-theory.netlify.app',
     ],
